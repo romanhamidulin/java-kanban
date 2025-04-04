@@ -1,4 +1,7 @@
-package PACKAGE_NAME;
+public class Epic extends Task {
 
-public class Epic {
+    Epic(String name, String description, TaskStatus status) {
+        super(name, description, status);
+    }
+
 }

@@ -1,4 +1,5 @@
-package PACKAGE_NAME;
-
-public class ProgressType {
+public enum TaskStatus {
+    NEW,
+    IN_PROGRESS,
+    DONE
 }
