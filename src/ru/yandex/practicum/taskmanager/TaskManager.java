@@ -3,10 +3,10 @@ package ru.yandex.practicum.taskmanager;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-import ru.yandex.practicum.taskmanager.tasks.Task;
-import ru.yandex.practicum.taskmanager.tasks.Epic;
-import ru.yandex.practicum.taskmanager.tasks.Subtask;
-import ru.yandex.practicum.taskmanager.tasks.TaskStatus;
+import ru.practicum.yandex.tasks.Task;
+import ru.practicum.yandex.tasks.Epic;
+import ru.practicum.yandex.tasks.Subtask;
+import ru.practicum.yandex.tasks.TaskStatus;
 
 public class TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
@@ -44,29 +44,28 @@ public class TaskManager {
 
     // получить таск
     public Task getTaskById(Integer taskId) {
-
-        if (tasks.containsKey(taskId)) return tasks.get(taskId);
-        return null;
+        return tasks.get(taskId);
     }
 
     // получить эпик
     public Epic getEpicById(Integer epicId) {
 
-        if (epics.containsKey(epicId)) return epics.get(epicId);
-        return null;
+        return epics.get(epicId);
     }
 
     // получить подзадачу
     public Subtask getSubtaskById(Integer subTaskId) {
 
-        if (subtasks.containsKey(subTaskId)) return subtasks.get(subTaskId);
-        return null;
+        return subtasks.get(subTaskId);
     }
+
     //получить список подзадач эпика по id
     public ArrayList<Subtask> getSubtasks(Integer epicId) {
         Epic epic = getEpicById(epicId);
+        if (epic == null) return null;
         return new ArrayList<>(epic.getSubtaskList());
     }
+
     //получить список подзадач эпика по Object
     public ArrayList<Subtask> getSubtasks(Epic epic) {
         return new ArrayList<>(epic.getSubtaskList());
@@ -116,7 +115,7 @@ public class TaskManager {
         }
         if (allTaskDoneCount == subList.size() && allTaskDoneCount > 0) {
             epic.setStatus(TaskStatus.DONE);
-        } else if (allTaskIsNew == subList.size() && allTaskIsNew > 0) {
+        } else if (allTaskIsNew == subList.size()) {
             epic.setStatus(TaskStatus.NEW);
         } else {
             epic.setStatus(TaskStatus.IN_PROGRESS);

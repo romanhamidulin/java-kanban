@@ -1,6 +1,6 @@
-package ru.yandex.practicum.taskmanager.tasks;
+package ru.practicum.yandex.tasks;
 
-public class Subtask extends Task{
+public class Subtask extends Task {
     private final int epicId;
 
     Subtask(int id, String name, String description, TaskStatus status, int epicId) {

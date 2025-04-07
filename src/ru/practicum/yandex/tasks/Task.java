@@ -1,6 +1,5 @@
-package ru.yandex.practicum.taskmanager.tasks;
+package ru.practicum.yandex.tasks;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class Task {
@@ -84,7 +83,7 @@ public class Task {
         return status;
     }
 
-    public void setStatus(TaskStatus status) {
+    public final void setStatus(TaskStatus status) {
         this.status = status;
     }
 }

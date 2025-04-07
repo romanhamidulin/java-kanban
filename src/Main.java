@@ -1,10 +1,9 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 import ru.yandex.practicum.taskmanager.TaskManager;
-import ru.yandex.practicum.taskmanager.tasks.Task;
-import ru.yandex.practicum.taskmanager.tasks.Epic;
-import ru.yandex.practicum.taskmanager.tasks.Subtask;
-import ru.yandex.practicum.taskmanager.tasks.TaskStatus;
+import ru.practicum.yandex.tasks.Task;
+import ru.practicum.yandex.tasks.Epic;
+import ru.practicum.yandex.tasks.Subtask;
+import ru.practicum.yandex.tasks.TaskStatus;
 
 
 public class Main {
@@ -44,9 +43,17 @@ public class Main {
         taskManager.addSubtask(completeJavaCoreSubtask5);
         System.out.println(completeJavaCore);
         System.out.println("Добавили в эпик подзадачи");
+        //completeJavaCoreSubtask1.setStatus(TaskStatus.DONE);
         completeJavaCoreSubtask2.setStatus(TaskStatus.DONE);
+        //completeJavaCoreSubtask3.setStatus(TaskStatus.DONE);
+        //completeJavaCoreSubtask4.setStatus(TaskStatus.DONE);
+        //completeJavaCoreSubtask5.setStatus(TaskStatus.DONE);
         System.out.println("Обновили в эпике подзадачи");
+        //taskManager.updateSubtask(completeJavaCoreSubtask1);
         taskManager.updateSubtask(completeJavaCoreSubtask2);
+        //taskManager.updateSubtask(completeJavaCoreSubtask3);
+        //taskManager.updateSubtask(completeJavaCoreSubtask4);
+        //taskManager.updateSubtask(completeJavaCoreSubtask5);
         System.out.println(completeJavaCore);
         System.out.println("Получаем подзадачи эпика");
         System.out.println(taskManager.getSubtasks(completeJavaCore));

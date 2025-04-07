@@ -1,13 +1,12 @@
-package ru.yandex.practicum.taskmanager.tasks;
+package ru.practicum.yandex.tasks;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Epic extends Task {
 
     private ArrayList<Subtask> subtaskList = new ArrayList<>();
 
-    Epic(int id, String name, String description, TaskStatus status) {
+    public Epic(int id, String name, String description, TaskStatus status) {
         super(id, name, description, status);
     }
     public Epic(String name, String description) {
@@ -46,4 +45,5 @@ public class Epic extends Task {
                 '}';
         return result;
     }
+
 }
