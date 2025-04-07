@@ -1,5 +1,11 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import ru.yandex.practicum.taskmanager.TaskManager;
+import ru.yandex.practicum.taskmanager.tasks.Task;
+import ru.yandex.practicum.taskmanager.tasks.Epic;
+import ru.yandex.practicum.taskmanager.tasks.Subtask;
+import ru.yandex.practicum.taskmanager.tasks.TaskStatus;
+
 
 public class Main {
 

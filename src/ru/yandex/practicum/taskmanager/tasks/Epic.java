@@ -1,3 +1,5 @@
+package ru.yandex.practicum.taskmanager.tasks;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,7 +23,8 @@ public class Epic extends Task {
     }
 
     public ArrayList<Subtask> getSubtaskList() {
-        return subtaskList;
+        //return subtaskList;
+        return new ArrayList<>(subtaskList);
     }
 
     public void setSubtaskList(ArrayList<Subtask> subtaskList) {

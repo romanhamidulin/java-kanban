@@ -1,3 +1,5 @@
+package ru.yandex.practicum.taskmanager.tasks;
+
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -8,7 +10,7 @@ public class Task {
     private String description;
     private TaskStatus status;
 
-    Task(int id,String name, String description, TaskStatus status) {
+    public Task(int id, String name, String description, TaskStatus status) {
         this.id = id;
         this.name = name;
         this.description = description;

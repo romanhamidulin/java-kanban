@@ -1,3 +1,5 @@
+package ru.yandex.practicum.taskmanager.tasks;
+
 public class Subtask extends Task{
     private final int epicId;
 
@@ -5,7 +7,7 @@ public class Subtask extends Task{
         super(id, name, description, status);
         this.epicId = epicId;
     }
-    Subtask(String name, String description, int epicId) {
+    public Subtask(String name, String description, int epicId) {
         super(name, description);
         this.epicId = epicId;
     }
@@ -24,4 +26,4 @@ public class Subtask extends Task{
                 ", status=" + getStatus() + "}";
     }
 
-    }
+}
