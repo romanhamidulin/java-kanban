@@ -48,6 +48,8 @@ public class Main {
         System.out.println("Обновили в эпике подзадачи");
         taskManager.updateSubtask(completeJavaCoreSubtask2);
         System.out.println(completeJavaCore);
+        System.out.println("Получаем подзадачи эпика");
+        System.out.println(taskManager.getSubtasks(completeJavaCore));
         System.out.println("Удалили в эпике подзадачи");
         taskManager.deleteSubtask(completeJavaCoreSubtask2);
         System.out.println(completeJavaCore);
