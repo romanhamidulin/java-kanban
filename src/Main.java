@@ -25,17 +25,33 @@ public class Main {
 
         Epic completeJavaCore = new Epic("Пройти курс Java Core: введение", "Нужно успеть до 05.05.2025");
         taskManager.addEpic(completeJavaCore);
+        System.out.println("Создали эпик без подзадач");
         System.out.println(completeJavaCore);
         Subtask completeJavaCoreSubtask1 = new Subtask("Пройти спринт 1", "Нужно успеть до 10.03.2025(мягкий дедлайн)",
                 completeJavaCore.getId());
         Subtask completeJavaCoreSubtask2 = new Subtask("Пройти спринт 2", "Нужно успеть до 24.03.2025(мягкий дедлайн)",
                 completeJavaCore.getId());
+        Subtask completeJavaCoreSubtask3 = new Subtask("Пройти спринт 3", "Нужно успеть до 07.04.2025(мягкий дедлайн)",
+                completeJavaCore.getId());
+        Subtask completeJavaCoreSubtask4 = new Subtask("Пройти спринт 4", "Нужно успеть до 21.04.2025(мягкий дедлайн)",
+                completeJavaCore.getId());
+        Subtask completeJavaCoreSubtask5 = new Subtask("Пройти спринт 5", "Нужно успеть до 05.05.2025(мягкий дедлайн)",
+                completeJavaCore.getId());
         taskManager.addSubtask(completeJavaCoreSubtask1);
         taskManager.addSubtask(completeJavaCoreSubtask2);
+        taskManager.addSubtask(completeJavaCoreSubtask3);
+        taskManager.addSubtask(completeJavaCoreSubtask4);
+        taskManager.addSubtask(completeJavaCoreSubtask5);
         System.out.println(completeJavaCore);
+        System.out.println("Добавили в эпик подзадачи");
         completeJavaCoreSubtask2.setStatus(TaskStatus.DONE);
+        System.out.println("Обновили в эпике подзадачи");
         taskManager.updateSubtask(completeJavaCoreSubtask2);
         System.out.println(completeJavaCore);
+        System.out.println("Удалили в эпике подзадачи");
+        taskManager.deleteSubtask(completeJavaCoreSubtask2);
+        System.out.println(completeJavaCore);
+
     }
 }
 
