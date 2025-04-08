@@ -25,6 +25,8 @@ public class Main {
         Epic completeJavaCore = new Epic("Пройти курс Java Core: введение", "Нужно успеть до 05.05.2025");
         taskManager.addEpic(completeJavaCore);
         System.out.println("Создали эпик без подзадач");
+        //System.out.println(completeJavaCore);
+        //completeJavaCore.setStatus(TaskStatus.DONE);
         System.out.println(completeJavaCore);
         Subtask completeJavaCoreSubtask1 = new Subtask("Пройти спринт 1", "Нужно успеть до 10.03.2025(мягкий дедлайн)",
                 completeJavaCore.getId());
@@ -41,8 +43,8 @@ public class Main {
         taskManager.addSubtask(completeJavaCoreSubtask3);
         taskManager.addSubtask(completeJavaCoreSubtask4);
         taskManager.addSubtask(completeJavaCoreSubtask5);
-        System.out.println(completeJavaCore);
         System.out.println("Добавили в эпик подзадачи");
+        System.out.println(completeJavaCore);
         //completeJavaCoreSubtask1.setStatus(TaskStatus.DONE);
         completeJavaCoreSubtask2.setStatus(TaskStatus.DONE);
         //completeJavaCoreSubtask3.setStatus(TaskStatus.DONE);

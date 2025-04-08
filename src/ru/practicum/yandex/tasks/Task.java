@@ -83,7 +83,7 @@ public class Task {
         return status;
     }
 
-    public final void setStatus(TaskStatus status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 }

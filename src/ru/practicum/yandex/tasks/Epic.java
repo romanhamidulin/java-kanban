@@ -46,4 +46,27 @@ public class Epic extends Task {
         return result;
     }
 
+    public void setStatus(TaskStatus status) {
+        int allTaskDoneCount = 0;
+        int allTaskIsNew = 0;
+
+        for (Subtask subtask : subtaskList) {
+            if (subtask.getStatus() == TaskStatus.DONE) {
+                allTaskDoneCount++;
+            }
+            if (subtask.getStatus() == TaskStatus.NEW) {
+                allTaskIsNew++;
+            }
+        }
+        if (allTaskDoneCount == subtaskList.size() && allTaskDoneCount > 0) {
+            //setStatus(TaskStatus.DONE);
+            super.setStatus(TaskStatus.DONE);
+        } else if (allTaskIsNew == subtaskList.size()) {
+            //setStatus(TaskStatus.NEW);
+            super.setStatus(TaskStatus.NEW);
+        } else {
+            //setStatus(TaskStatus.IN_PROGRESS);
+            super.setStatus(TaskStatus.IN_PROGRESS);
+        }
+    }
 }
