@@ -1,9 +1,9 @@
 import java.util.Scanner;
 import ru.yandex.practicum.taskmanager.TaskManager;
-import ru.practicum.yandex.tasks.Task;
-import ru.practicum.yandex.tasks.Epic;
-import ru.practicum.yandex.tasks.Subtask;
-import ru.practicum.yandex.tasks.TaskStatus;
+import ru.yandex.practicum.tasks.Task;
+import ru.yandex.practicum.tasks.Epic;
+import ru.yandex.practicum.tasks.Subtask;
+import ru.yandex.practicum.tasks.TaskStatus;
 
 
 public class Main {
