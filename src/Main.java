@@ -1,9 +1,9 @@
 import java.util.Scanner;
-import ru.yandex.practicum.taskmanager.TaskManager;
+import ru.yandex.practicum.manager.InMemoryTaskManager;
 import ru.yandex.practicum.tasks.Task;
 import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Subtask;
-import ru.yandex.practicum.tasks.TaskStatus;
+import ru.yandex.practicum.enums.TaskStatus;
 
 
 public class Main {
@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Поехали!");
-        TaskManager taskManager = new TaskManager();
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
         Task compliteSprint = new Task("Начать проходить 4й спринт", "Управиться за 2 недели");
         Task compliteSprintAdded = taskManager.addTask(compliteSprint);
