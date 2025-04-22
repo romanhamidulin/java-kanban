@@ -118,7 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     //отображение последних просмотренных пользователем задач
     @Override
-    public List<Task> getHistory() {
+    public ArrayList<Task> getHistory() {
         return new ArrayList<>(history.getHistory());
     }
 
@@ -230,23 +230,23 @@ public class InMemoryTaskManager implements TaskManager {
 
     // удалить таск по id
     @Override
-    public void deleteTask(Integer taskId) {
-        tasks.remove(taskId);
+    public Task deleteTask(Integer taskId) {
+        return tasks.remove(taskId);
     }
 
     // удалить эпик по id
     @Override
-    public void deleteEpic(Integer epicId) {
+    public Epic deleteEpic(Integer epicId) {
         ArrayList<Subtask> epicSubtasks = epics.get(epicId).getSubtaskList();
-        epics.remove(epicId);
         for (Subtask subtask : epicSubtasks) {
             subtasks.remove(subtask.getId());
         }
+        return epics.remove(epicId);
     }
 
     // удалить подзадачу по id
     @Override
-    public void deleteSubtask(Integer subTaskId) {
+    public Subtask deleteSubtask(Integer subTaskId) {
         Subtask removedSubtask = subtasks.get(subTaskId);
         subtasks.remove(subTaskId);
         int epicId = removedSubtask.getEpicId();
@@ -255,6 +255,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtaskList.remove(removedSubtask);
         epic.setSubtaskList(subtaskList);
         updateEpicStatus(epic);
+        return removedSubtask;
     }
 
     // удалить подзадачу по Object

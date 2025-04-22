@@ -46,7 +46,7 @@ public interface TaskManager {
     ArrayList<Subtask> getSubtasks(Epic epic);
 
     //отображение последних просмотренных пользователем задач
-    List<Task> getHistory();
+    ArrayList<Task> getHistory();
 
     // обновляем таск
     Task updateTask(Task task);
@@ -70,13 +70,13 @@ public interface TaskManager {
     void deleteSubtasks();
 
     // удалить таск по id
-    void deleteTask(Integer taskId);
+    Task deleteTask(Integer taskId);
 
     // удалить эпик по id
-    void deleteEpic(Integer epicId);
+    Epic deleteEpic(Integer epicId);
 
     // удалить подзадачу по id
-    void deleteSubtask(Integer subTaskId);
+    Subtask deleteSubtask(Integer subTaskId);
 
     // удалить подзадачу по Object
     void deleteSubtask(Subtask subtask);
