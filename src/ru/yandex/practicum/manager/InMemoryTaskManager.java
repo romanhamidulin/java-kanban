@@ -2,7 +2,7 @@ package ru.yandex.practicum.manager;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import ru.yandex.practicum.tasks.Task;
 import ru.yandex.practicum.tasks.Epic;
@@ -10,9 +10,9 @@ import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.enums.TaskStatus;
 
 public class InMemoryTaskManager implements TaskManager {
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private final HistoryManager history = Managers.getDefaultHistory();
     private int id = 1;
 
