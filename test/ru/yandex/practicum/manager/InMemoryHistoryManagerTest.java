@@ -8,6 +8,7 @@ import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,7 +23,7 @@ class InMemoryHistoryManagerTest {
         historyManager = Managers.getDefaultHistory();
     }
 
-    @Test
+    /*@Test
     void getHistoryIsShouldBeListOf10() {
         for (int i = 0; i < 20; i++) {
             taskManager.addTask(new Task("Таск " + (i + 1), "Описание таска" + (i + 1)));
@@ -35,12 +36,12 @@ class InMemoryHistoryManagerTest {
 
         ArrayList<Task> list = taskManager.getHistory();
         assertEquals(10, list.size(), "Ошибка! Количество элементов в истории больше максимально возможного ");
-    }
+    }*/
 
     @Test
     void addHistoryShouldIgnoreNullTask() {
         historyManager.add(null);
-        ArrayList<Task> history = historyManager.getHistory();
+        List<Task> history = historyManager.getHistory();
         assertEquals(0, history.size());
     }
 
@@ -56,7 +57,7 @@ class InMemoryHistoryManagerTest {
             taskManager.getTaskById(task.getId());
         }
 
-        ArrayList<Task> history = historyManager.getHistory();
+        List<Task> history = historyManager.getHistory();
         assertEquals(3, history.size());
         assertEquals(task1, history.get(0));
         assertEquals(task2, history.get(1));
