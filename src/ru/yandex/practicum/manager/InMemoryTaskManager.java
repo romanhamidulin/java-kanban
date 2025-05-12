@@ -231,7 +231,9 @@ public class InMemoryTaskManager implements TaskManager {
     // удалить таск по id
     @Override
     public Task deleteTask(Integer taskId) {
+        history.remove(taskId);
         return tasks.remove(taskId);
+
     }
 
     // удалить эпик по id

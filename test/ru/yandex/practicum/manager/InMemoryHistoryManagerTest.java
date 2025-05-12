@@ -50,12 +50,9 @@ class InMemoryHistoryManagerTest {
         Task task1 = new Task(1, "Task 1", "Описание 1", TaskStatus.NEW);
         Task task2 = new Task(2, "Task 2", "Описание 2", TaskStatus.IN_PROGRESS);
         Task task3 = new Task(3, "Task 3", "Описание 3", TaskStatus.DONE);
-        taskManager.addTask(task1);
-        taskManager.addTask(task2);
-        taskManager.addTask(task3);
-        for (Task task : taskManager.getTasks()) {
-            taskManager.getTaskById(task.getId());
-        }
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.add(task3);
 
         List<Task> history = historyManager.getHistory();
         assertEquals(3, history.size());
@@ -63,7 +60,25 @@ class InMemoryHistoryManagerTest {
         assertEquals(task2, history.get(1));
         assertEquals(task3, history.get(2));
     }
-
+    @Test
+    void shouldRemoveTaskFromHistory() {
+        Task task1 = new Task(1, "Task 1", "Описание 1", TaskStatus.NEW);
+        historyManager.add(task1);
+        historyManager.remove(task1.getId());
+        List<Task> history = historyManager.getHistory();
+        assertEquals(0, history.size());
+    }
+    @Test
+    void shouldNotFailForNotExistId() {
+        historyManager.remove(100);
+        List<Task> history = historyManager.getHistory();
+        assertEquals(0, history.size());
+    }
+    @Test
+    void shouldReturnEmptyListIfHistoryIsEmpty() {
+        List<Task> history = historyManager.getHistory();
+        assertTrue(history.isEmpty());
+    }
     @Test
     public void getHistoryShouldReturnOldTaskAfterUpdate() {
         Task task = new Task("Таск 1", "описание таск 1");

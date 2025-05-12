@@ -8,101 +8,121 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    //private static final int MAX_HISTORY_STORAGE = 10;
-    //private final ArrayList<Task> historyList = new ArrayList<>();
-    //создаем свой двусвязный список просмотренных задач
-    final private CustomLinkedList historyList = new CustomLinkedList();
+    private final CustomLinkedList historyList = new CustomLinkedList();
 
+    // Добавление нового просмотра задачи в историю
     @Override
     public void add(Task task) {
-       /* if (historyList.size() == MAX_HISTORY_STORAGE) {
-            historyList.removeFirst();
+        if (task != null) {
+            remove(task.getId());
+            historyList.linkLast(task);
         }
-        historyList.add(task);*/
-        historyList.linkLast(task);
     }
 
+    // Удаление просмотра из истории
     @Override
     public void remove(int id) {
-        historyList.removeNode(id);
+        historyList.removeNode(historyList.getNode(id));
     }
 
+    // Получение истории просмотров
     @Override
     public List<Task> getHistory() {
-        //return new ArrayList<>(historyList);
         return historyList.getTasks();
     }
     private static class CustomLinkedList {
+        private final Map<Integer, Node> history = new HashMap<>();
+        private Node head;
+        private Node tail;
 
-        //внутренний класс для создания узла в коллекции
-        private static class Node<T> {
-            public T task;
-            public Node<T> next;
-            public Node<T> prev;
+        private void linkLast(Task task) {
+            Node element = new Node();
+            element.setTask(task);
 
-            public Node(Node<T> prev, T task, Node<T> next) {
-                this.task = task;
-                this.next = next;
-                this.prev = prev;
-            }
-        }
-
-        private Node<Task> head;
-        private Node<Task> tail;
-
-        //мапа для хранения пары номер задачи - узел
-        //(для удаления предыдущего просмотра задачи из истории за O(1))
-        final private Map<Integer, Node<Task>> history = new HashMap<>();
-
-        //метод добавляет задачу в конец списка и удаляет ее предыдущий просмотр
-        public void linkLast(Task task) {
             if (history.containsKey(task.getId())) {
                 removeNode(history.get(task.getId()));
             }
-            final Node<Task> oldTail = tail;
-            final Node<Task> newNode = new Node<>(oldTail, task, null);
-            tail = newNode;
-            if (oldTail == null) {
-                head = newNode;
+
+            if (head == null) {
+                tail = element;
+                head = element;
+                element.setNext(null);
+                element.setPrev(null);
             } else {
-                oldTail.next = newNode;
+                element.setPrev(tail);
+                element.setNext(null);
+                tail.setNext(element);
+                tail = element;
             }
-            history.put(task.getId(), newNode);
+
+            history.put(task.getId(), element);
         }
 
-        //метод принимает id задачи на удаление и передает соответствующий узел в сл метод по удалению
-        private void removeNode(int id) {
-            if (history.containsKey(id)) {
-                removeNode(history.get(id));
-            }
-        }
-
-        //метод удаляет из мапы узел с уже просмотренной и добавляемой вновь задачей
-        private void removeNode(Node<Task> node) {
-            final Node<Task> prev = node.prev;
-            final Node<Task> next = node.next;
-            if (prev == null) {
-                head = next;
-            } else {
-                prev.next = next;
-                node.prev = null;
-            }
-            if (next == null) {
-                tail = prev;
-            } else {
-                next.prev = prev;
-                node.next = null;
-            }
-            node.task = null;
-        }
-
-        //метод формирует список задач для просмотра истории
         private List<Task> getTasks() {
-            List<Task> tasks = new ArrayList<>();
-            for (Node<Task> node = head; node != null; node = node.next) {
-                tasks.add(node.task);
+            List<Task> result = new ArrayList<>();
+            Node element = head;
+            while (element != null) {
+                result.add(element.getTask());
+                element = element.getNext();
             }
-            return tasks;
+            return result;
         }
+
+        private void removeNode(Node node) {
+            if (node != null) {
+                history.remove(node.getTask().getId());
+                Node prev = node.getPrev();
+                Node next = node.getNext();
+
+                if (head == node) {
+                    head = node.getNext();
+                }
+                if (tail == node) {
+                    tail = node.getPrev();
+                }
+
+                if (prev != null) {
+                    prev.setNext(next);
+                }
+
+                if (next != null) {
+                    next.setPrev(prev);
+                }
+            }
+        }
+
+        private Node getNode(int id) {
+            return history.get(id);
+        }
+    }
+}
+
+class Node {
+    private Task task;
+    private Node prev;
+    private Node next;
+
+    public Node getNext() {
+        return next;
+    }
+
+    public Node getPrev() {
+        return prev;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setNext(Node next) {
+        this.next = next;
+    }
+
+    public void setPrev(Node prev) {
+        this.prev = prev;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 }
