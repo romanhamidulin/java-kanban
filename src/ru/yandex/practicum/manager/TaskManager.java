@@ -4,7 +4,7 @@ import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
 
@@ -29,25 +29,25 @@ public interface TaskManager {
     Subtask getSubtaskById(Integer subTaskId);
 
     // получить таски
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
     // получить эпики
-    ArrayList<Epic> getEpics();
+    List<Epic> getEpics();
 
     // получить подзадачи
-    ArrayList<Subtask> getSubtasks();
+    List<Subtask> getSubtasks();
 
     // получить подзадачи эпика
-    ArrayList<Subtask> getEpicSubtasks(Epic epic);
+    List<Subtask> getEpicSubtasks(Epic epic);
 
     //получить список подзадач эпика по id
-    ArrayList<Subtask> getSubtasks(Integer epicId);
+    List<Subtask> getSubtasks(Integer epicId);
 
     //получить список подзадач эпика по Object
-    ArrayList<Subtask> getSubtasks(Epic epic);
+    List<Subtask> getSubtasks(Epic epic);
 
     //отображение последних просмотренных пользователем задач
-    ArrayList<Task> getHistory();
+    List<Task> getHistory();
 
     // обновляем таск
     Task updateTask(Task task);
@@ -71,13 +71,13 @@ public interface TaskManager {
     void deleteSubtasks();
 
     // удалить таск по id
-    Task deleteTask(Integer taskId);
+    void deleteTask(Integer taskId);
 
     // удалить эпик по id
-    Epic deleteEpic(Integer epicId);
+    void deleteEpic(Integer epicId);
 
     // удалить подзадачу по id
-    Subtask deleteSubtask(Integer subTaskId);
+    void deleteSubtask(Integer subTaskId);
 
     // удалить подзадачу по Object
     void deleteSubtask(Subtask subtask);

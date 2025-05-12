@@ -86,7 +86,7 @@ class InMemoryHistoryManagerTest {
         taskManager.getTaskById(task.getId());
         taskManager.updateTask(new Task(task.getId(), "Обновленный таск 1",
                 "описание обновленного таск 1", TaskStatus.IN_PROGRESS));
-        ArrayList<Task> tasks = taskManager.getHistory();
+        List<Task> tasks = taskManager.getHistory();
         Task oldTask = tasks.getFirst();
         assertEquals(task.getName(), oldTask.getName(), "Ошибка! В истории не сохранилась старая версия задачи");
         assertEquals(task.getDescription(), oldTask.getDescription(),
@@ -101,7 +101,7 @@ class InMemoryHistoryManagerTest {
         taskManager.getEpicById(epic.getId());
         taskManager.updateEpic(new Epic(epic.getId(), "Новое имя", "новое описание",
                 TaskStatus.IN_PROGRESS));
-        ArrayList<Task> epics = taskManager.getHistory();
+        List<Task> epics = taskManager.getHistory();
         Epic oldEpic = (Epic) epics.getFirst();
         assertEquals(epic.getName(), oldEpic.getName(),
                 "Ошибка! В истории не сохранилась старая версия эпика");
@@ -119,7 +119,7 @@ class InMemoryHistoryManagerTest {
         taskManager.getSubtaskById(epicSubtask1.getId());
         taskManager.updateSubtask(new Subtask(epicSubtask1.getId(), "Новое имя",
                 "новое описание", TaskStatus.IN_PROGRESS, epic1.getId()));
-        ArrayList<Task> subtasks = taskManager.getHistory();
+        List<Task> subtasks = taskManager.getHistory();
         Subtask oldSubtask = (Subtask) subtasks.getFirst();
         assertEquals(epicSubtask1.getName(), oldSubtask.getName(),
                 "Ошибка! В истории не сохранилась старая версия эпика");
