@@ -2,8 +2,6 @@ package ru.yandex.practicum.tasks;
 
 import ru.yandex.practicum.enums.TaskStatus;
 
-import java.util.Objects;
-
 public class Task {
 
     private int id;
