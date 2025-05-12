@@ -30,9 +30,13 @@ public class InMemoryHistoryManager implements HistoryManager {
     public List<Task> getHistory() {
         return historyList.getTasks();
     }
+
     private static class CustomLinkedList {
+
         private final Map<Integer, Node> history = new HashMap<>();
+
         private Node head;
+
         private Node tail;
 
         private void linkLast(Task task) {
