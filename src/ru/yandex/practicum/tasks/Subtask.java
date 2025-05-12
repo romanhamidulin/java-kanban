@@ -3,6 +3,7 @@ package ru.yandex.practicum.tasks;
 import ru.yandex.practicum.enums.TaskStatus;
 
 public class Subtask extends Task {
+
     private final int epicId;
 
     public Subtask(int id, String name, String description, TaskStatus status, int epicId) {
