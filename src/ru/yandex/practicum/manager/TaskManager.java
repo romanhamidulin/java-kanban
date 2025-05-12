@@ -5,36 +5,37 @@ import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public interface TaskManager {
+
     int nextId();
+
     // добавить таск
     Task addTask(Task task);
 
     // добавить эпик
-    Epic addEpic(Epic epic) ;
+    Epic addEpic(Epic epic);
 
     // добавить подзадачу
-    Subtask addSubtask(Subtask subtask) ;
+    Subtask addSubtask(Subtask subtask);
 
     // получить таск
-    Task getTaskById(Integer taskId) ;
+    Task getTaskById(Integer taskId);
 
     // получить эпик
-    Epic getEpicById(Integer epicId) ;
+    Epic getEpicById(Integer epicId);
 
     // получить подзадачу
-    Subtask getSubtaskById(Integer subTaskId) ;
+    Subtask getSubtaskById(Integer subTaskId);
 
     // получить таски
-    ArrayList<Task> getTasks() ;
+    ArrayList<Task> getTasks();
 
     // получить эпики
-    ArrayList<Epic> getEpics() ;
+    ArrayList<Epic> getEpics();
 
     // получить подзадачи
-    ArrayList<Subtask> getSubtasks() ;
+    ArrayList<Subtask> getSubtasks();
 
     // получить подзадачи эпика
     ArrayList<Subtask> getEpicSubtasks(Epic epic);
