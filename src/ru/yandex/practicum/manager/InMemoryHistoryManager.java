@@ -80,7 +80,6 @@ public class InMemoryHistoryManager implements HistoryManager {
                 history.remove(node.getTask().getId());
                 Node prev = node.getPrev();
                 Node next = node.getNext();
-var test = head.getNext();
 
                 if (head.equals(node)) {
                     head = node.getNext();
