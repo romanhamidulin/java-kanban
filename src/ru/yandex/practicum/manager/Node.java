@@ -30,4 +30,13 @@ class Node {
     public void setTask(Task task) {
         this.task = task;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Node node = (Node) object;
+        return next == node.next && prev == node.prev && task == node.task;
+        //return id == task.id;
+    }
 }

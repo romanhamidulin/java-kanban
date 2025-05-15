@@ -48,16 +48,19 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
 
             if (head == null) {
-                tail = element;
+                //tail = element;
                 head = element;
-                element.setNext(null);
+                //element.setNext(null);
                 element.setPrev(null);
             } else {
                 element.setPrev(tail);
-                element.setNext(null);
+                //element.setNext(null);
                 tail.setNext(element);
-                tail = element;
+                //tail = element;
             }
+
+            tail = element;
+            element.setNext(null);
 
             history.put(task.getId(), element);
         }
@@ -77,11 +80,12 @@ public class InMemoryHistoryManager implements HistoryManager {
                 history.remove(node.getTask().getId());
                 Node prev = node.getPrev();
                 Node next = node.getNext();
+var test = head.getNext();
 
-                if (head == node) {
+                if (head.equals(node)) {
                     head = node.getNext();
                 }
-                if (tail == node) {
+                if (tail.equals(node)) {
                     tail = node.getPrev();
                 }
 
