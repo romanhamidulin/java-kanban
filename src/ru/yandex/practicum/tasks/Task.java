@@ -2,8 +2,6 @@ package ru.yandex.practicum.tasks;
 
 import ru.yandex.practicum.enums.TaskStatus;
 
-import java.util.Objects;
-
 public class Task {
 
     private int id;
@@ -18,6 +16,7 @@ public class Task {
         this.status = status;
 
     }
+
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
@@ -29,8 +28,9 @@ public class Task {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description)
-                && status == task.status;
+        //return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description)
+        //        && status == task.status;
+        return id == task.id;
     }
 
     @Override
