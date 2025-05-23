@@ -100,6 +100,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
+    @Override
+    public void updateEpicStatus(Epic epic) {
+        super.updateEpicStatus(epic);
+        save();
+    }
+
     private void save() {
         try (FileWriter writer = new FileWriter(file, false)) {
             writer.write("id,type,name,status,description,epic\n");
@@ -135,7 +141,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
         try (BufferedReader buf = new BufferedReader(new FileReader(file))) {
-            String line;
+            //пропустим заголовок
+            String line= buf.readLine();
             while (buf.ready()) {
                 line = buf.readLine();
                 if (line.contains("EPIC")) {
