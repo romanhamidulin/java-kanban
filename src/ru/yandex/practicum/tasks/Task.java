@@ -1,8 +1,7 @@
 package ru.yandex.practicum.tasks;
 
 import ru.yandex.practicum.enums.TaskStatus;
-
-import java.util.Objects;
+import ru.yandex.practicum.enums.TaskTypes;
 
 public class Task {
 
@@ -10,18 +9,22 @@ public class Task {
     private String name;
     private String description;
     private TaskStatus status;
+    protected TaskTypes type;
 
     public Task(int id, String name, String description, TaskStatus status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
+        this.type = TaskTypes.TASK;;
 
     }
+
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
         this.status = TaskStatus.NEW;
+        this.type = TaskTypes.TASK;;
     }
 
     @Override
@@ -29,8 +32,9 @@ public class Task {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description)
-                && status == task.status;
+        //return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description)
+        //        && status == task.status;
+        return id == task.id;
     }
 
     @Override
@@ -53,6 +57,7 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", type=" + type +
                 '}';
     }
 
@@ -85,6 +90,9 @@ public class Task {
         return status;
     }
 
+    public Object getType() {
+        return type;
+    }
 //    public void setStatus(TaskStatus status) {
 //        this.status = status;
 //    }
