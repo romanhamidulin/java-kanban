@@ -6,7 +6,6 @@ import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 
 import java.io.*;
-import java.util.ArrayList;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
@@ -142,7 +141,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
         try (BufferedReader buf = new BufferedReader(new FileReader(file))) {
             //пропустим заголовок
-            String line= buf.readLine();
+            String line = buf.readLine();
             while (buf.ready()) {
                 line = buf.readLine();
                 if (line.contains("EPIC")) {
