@@ -105,9 +105,11 @@ public class Task {
     public LocalDateTime getStartTime() {
         return startTime;
     }
+
     public Integer getDuration() {
         return duration;
     }
+
     public LocalDateTime getEndTime() {
         if (startTime == null) return null;
         return startTime.plusMinutes(duration);
