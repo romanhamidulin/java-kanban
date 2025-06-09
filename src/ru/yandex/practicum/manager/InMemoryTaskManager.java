@@ -253,34 +253,26 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void setEpicEndTime(Epic epic) {
-        LocalDateTime startTime = null;
-        LocalDateTime endTime = null;
-        Duration duration = Duration.ZERO;
-        for (Subtask subTask : epic.getSubtaskList()) {
-            if (subTask.getStartTime() == null || subTask.getEndTime() == null) {
-                continue;
-            }
-            if (startTime == null) {
-                startTime = subTask.getStartTime();
-            } else {
-                if (subTask.getStartTime().isBefore(startTime)) {
-                    startTime = subTask.getStartTime();
-                }
-            }
-            if (endTime == null) {
-                endTime = subTask.getEndTime();
-            } else {
-                if (subTask.getEndTime().isAfter(endTime)) {
-                    endTime = subTask.getEndTime();
-                }
-            }
-            duration.plus(subTask.getDuration());
-        }
-        epic.setStartTime(startTime);
-        epic.setEndTime(endTime);
+        List<Subtask> validSubtasks = epic.getSubtaskList().stream()
+                .filter(subTask -> subTask.getStartTime() != null && subTask.getEndTime() != null)
+                .toList();
+
+        Optional<LocalDateTime> startTime = validSubtasks.stream()
+                .map(Subtask::getStartTime)
+                .min(LocalDateTime::compareTo);
+
+        Optional<LocalDateTime> endTime = validSubtasks.stream()
+                .map(Subtask::getEndTime)
+                .max(LocalDateTime::compareTo);
+
+        Duration duration = validSubtasks.stream()
+                .map(Subtask::getDuration)
+                .reduce(Duration.ZERO, Duration::plus);
+
+        epic.setStartTime(startTime.orElse(null));
+        epic.setEndTime(endTime.orElse(null));
         epic.setDuration(duration);
     }
-
     // удалить таски
     @Override
     public void deleteTasks() {
