@@ -273,6 +273,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setEndTime(endTime.orElse(null));
         epic.setDuration(duration);
     }
+
     // удалить таски
     @Override
     public void deleteTasks() {
