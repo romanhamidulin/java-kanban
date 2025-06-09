@@ -10,6 +10,7 @@ import ru.yandex.practicum.tasks.Task;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +32,7 @@ class FileBackedTaskManagerTest {
 
     @Test
     void addAndSaveTask() {
-        Task task = new Task(1,"Task 1", "Description 1", TaskStatus.NEW);
+        Task task = new Task(1,"Task 1", "Description 1", TaskStatus.NEW, LocalDateTime.now(), 10);
         manager.addTask(task);
 
         List<Task> tasks = manager.getTasks();
@@ -46,7 +47,7 @@ class FileBackedTaskManagerTest {
 
     @Test
     void addAndSaveEpic() {
-        Epic epic = new Epic(1,"Epic 1", "Description 1",  TaskStatus.NEW);
+        Epic epic = new Epic(1,"Epic 1", "Description 1",  TaskStatus.NEW, LocalDateTime.now(), 10);
         manager.addEpic(epic);
 
         List<Epic> epics = manager.getEpics();
@@ -61,10 +62,10 @@ class FileBackedTaskManagerTest {
 
     @Test
     void addAndSaveSubtask() {
-        Epic epic = new Epic(1,"Epic 1", "Description 1", TaskStatus.NEW);
+        Epic epic = new Epic(1,"Epic 1", "Description 1", TaskStatus.NEW, LocalDateTime.now(), 10);
         manager.addEpic(epic);
 
-        Subtask subtask = new Subtask(2,"Subtask 1", "Description 1", TaskStatus.NEW, epic.getId());
+        Subtask subtask = new Subtask(2,"Subtask 1", "Description 1", TaskStatus.NEW, LocalDateTime.now(), 10, epic.getId());
         manager.addSubtask(subtask);
 
         List<Subtask> subtasks = manager.getSubtasks();
@@ -79,8 +80,8 @@ class FileBackedTaskManagerTest {
 
     @Test
     void testSaveAndLoadMultipleTasks() {
-        Task task1 = new Task(1,"Task 1", "Description 1", TaskStatus.NEW);
-        Task task2 = new Task(2,"Task 2", "Description 2", TaskStatus.DONE);
+        Task task1 = new Task(1,"Task 1", "Description 1", TaskStatus.NEW, LocalDateTime.now(), 10);
+        Task task2 = new Task(2,"Task 2", "Description 2", TaskStatus.DONE, LocalDateTime.now().plusMinutes(15), 10);
         manager.addTask(task1);
         manager.addTask(task2);
 
@@ -105,7 +106,7 @@ class FileBackedTaskManagerTest {
 
     @Test
     void testSaveAndLoadAfterDeletingTask() {
-        Task task = new Task(1,"Task 1", "Description 1", TaskStatus.NEW);
+        Task task = new Task(1,"Task 1", "Description 1", TaskStatus.NEW, LocalDateTime.now(), 10);
         manager.addTask(task);
         manager.deleteTask(task.getId());
 
@@ -119,7 +120,7 @@ class FileBackedTaskManagerTest {
 
     @Test
     void testSaveAndLoadAfterUpdatingTask() {
-        Task task = new Task(1,"Task 1", "Description 1", TaskStatus.NEW);
+        Task task = new Task(1,"Task 1", "Description 1", TaskStatus.NEW, LocalDateTime.now(), 10);
         manager.addTask(task);
         task.setDescription("Updated Description");
         manager.updateTask(task);

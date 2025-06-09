@@ -5,6 +5,7 @@ import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
 
@@ -87,4 +88,8 @@ public interface TaskManager {
 
     // напечатать все таски/эпики/подзадачи
     void printAll();
+
+    TreeSet<Task> getPrioritizedTasks();
+
+    void setEpicEndTime(Epic epic);
 }

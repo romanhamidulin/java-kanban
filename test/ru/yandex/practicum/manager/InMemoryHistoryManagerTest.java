@@ -7,6 +7,7 @@ import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,9 +48,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void getHistoryCorrectOrder() {
-        Task task1 = new Task(1, "Task 1", "Описание 1", TaskStatus.NEW);
-        Task task2 = new Task(2, "Task 2", "Описание 2", TaskStatus.IN_PROGRESS);
-        Task task3 = new Task(3, "Task 3", "Описание 3", TaskStatus.DONE);
+        Task task1 = new Task(1, "Task 1", "Описание 1", TaskStatus.NEW, LocalDateTime.now(),10);
+        Task task2 = new Task(2, "Task 2", "Описание 2", TaskStatus.IN_PROGRESS,LocalDateTime.now().plusMinutes(15),2);
+        Task task3 = new Task(3, "Task 3", "Описание 3", TaskStatus.DONE,LocalDateTime.now().plusMinutes(5),10);
         historyManager.add(task1);
         historyManager.add(task2);
         historyManager.add(task3);
@@ -62,7 +63,7 @@ class InMemoryHistoryManagerTest {
     }
     @Test
     void shouldRemoveTaskFromHistory() {
-        Task task1 = new Task(1, "Task 1", "Описание 1", TaskStatus.NEW);
+        Task task1 = new Task(1, "Task 1", "Описание 1", TaskStatus.NEW, LocalDateTime.now(),10);
         historyManager.add(task1);
         historyManager.remove(task1.getId());
         List<Task> history = historyManager.getHistory();
@@ -85,7 +86,7 @@ class InMemoryHistoryManagerTest {
         taskManager.addTask(task);
         taskManager.getTaskById(task.getId());
         taskManager.updateTask(new Task(task.getId(), "Обновленный таск 1",
-                "описание обновленного таск 1", TaskStatus.IN_PROGRESS));
+                "описание обновленного таск 1", TaskStatus.IN_PROGRESS, LocalDateTime.now(),10));
         List<Task> tasks = taskManager.getHistory();
         Task oldTask = tasks.getFirst();
         assertEquals(task.getName(), oldTask.getName(), "Ошибка! В истории не сохранилась старая версия задачи");
@@ -100,7 +101,7 @@ class InMemoryHistoryManagerTest {
         taskManager.addEpic(epic);
         taskManager.getEpicById(epic.getId());
         taskManager.updateEpic(new Epic(epic.getId(), "Новое имя", "новое описание",
-                TaskStatus.IN_PROGRESS));
+                TaskStatus.IN_PROGRESS, LocalDateTime.now(),10));
         List<Task> epics = taskManager.getHistory();
         Epic oldEpic = (Epic) epics.getFirst();
         assertEquals(epic.getName(), oldEpic.getName(),
@@ -118,7 +119,7 @@ class InMemoryHistoryManagerTest {
         taskManager.addSubtask(epicSubtask1);
         taskManager.getSubtaskById(epicSubtask1.getId());
         taskManager.updateSubtask(new Subtask(epicSubtask1.getId(), "Новое имя",
-                "новое описание", TaskStatus.IN_PROGRESS, epic1.getId()));
+                "новое описание", TaskStatus.IN_PROGRESS, LocalDateTime.now(),10, epic1.getId()));
         List<Task> subtasks = taskManager.getHistory();
         Subtask oldSubtask = (Subtask) subtasks.getFirst();
         assertEquals(epicSubtask1.getName(), oldSubtask.getName(),

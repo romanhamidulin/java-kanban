@@ -7,8 +7,11 @@ import ru.yandex.practicum.tasks.Task;
 import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Subtask;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,7 +73,7 @@ class InMemoryTaskManagerTest {
     void updateTaskIsShouldReturnSameTaskId() {
         final Task task = taskManager.addTask(new Task("Таск 1", "Описание таск 1"));
         taskManager.addTask(task);
-        final Task taskToUpdate = new Task(task.getId(), "новое имя", "новое описание", TaskStatus.DONE);
+        final Task taskToUpdate = new Task(task.getId(), "новое имя", "новое описание", TaskStatus.DONE,task.getStartTime(), task.getDuration());
         final Task updatedTask = taskManager.updateTask(taskToUpdate);
         assertEquals(task.getId(), updatedTask.getId(), "Ошибка! Вернулась задачи с другим id");
     }
@@ -78,7 +81,7 @@ class InMemoryTaskManagerTest {
     void updateEpicIsShouldReturnSameEpicId() {
         final Epic epic = taskManager.addEpic(new Epic("Эпик 1", "Описание эпика 1"));
         taskManager.addTask(epic);
-        final Epic epicToUpdate = new Epic(epic.getId(), "новое имя", "новое описание", TaskStatus.DONE);
+        final Epic epicToUpdate = new Epic(epic.getId(), "новое имя", "новое описание", TaskStatus.DONE, epic.getStartTime(), epic.getDuration());
         final Task updatedEpic = taskManager.updateTask(epicToUpdate);
         assertEquals(epic.getId(), updatedEpic.getId(), "Ошибка! Вернулcя эпик с другим id");
     }
@@ -89,7 +92,7 @@ class InMemoryTaskManagerTest {
         final Subtask subtask1 = new Subtask("Подзадача 1", "описание подзадачи 1", epic.getId());
         taskManager.addSubtask(subtask1);
         final Subtask subtaskToUpdate = new Subtask(subtask1.getId(), "новое имя", "новое описание",
-                TaskStatus.DONE, epic.getId());
+                TaskStatus.DONE, subtask1.getStartTime(), subtask1.getDuration(),epic.getId());
         final Subtask updatedSubtask = taskManager.updateSubtask(subtaskToUpdate);
         assertEquals(subtask1.getId(), updatedSubtask.getId(), "Ошибка! Вернулась подзадача с другим id");
     }
@@ -173,9 +176,9 @@ class InMemoryTaskManagerTest {
         final Epic epic1 = taskManager.addEpic(new Epic("Эпик 1",
                 "Описание эпика 1"));
         final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask(1,"Подзадача 1",
-                "Описание подзадачи 1",TaskStatus.DONE, epic1.getId()));
+                "Описание подзадачи 1",TaskStatus.DONE, LocalDateTime.now(),10,epic1.getId()));
         final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask(2,"Подзадача 2",
-                "Описание подзадачи 2",TaskStatus.DONE, epic1.getId()));
+                "Описание подзадачи 2",TaskStatus.DONE, LocalDateTime.now().plusMinutes(10),20,epic1.getId()));
         assertEquals(TaskStatus.DONE, taskManager.getEpicById(epic1.getId()).getStatus());
     }
 
@@ -184,9 +187,9 @@ class InMemoryTaskManagerTest {
         final Epic epic1 = taskManager.addEpic(new Epic("Эпик 1",
                 "Описание эпика 1"));
         final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask(1,"Подзадача 1",
-                "Описание подзадачи 1",TaskStatus.IN_PROGRESS, epic1.getId()));
+                "Описание подзадачи 1",TaskStatus.IN_PROGRESS, LocalDateTime.now(),10,epic1.getId()));
         final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask(2,"Подзадача 2",
-                "Описание подзадачи 2",TaskStatus.IN_PROGRESS, epic1.getId()));
+                "Описание подзадачи 2",TaskStatus.IN_PROGRESS, LocalDateTime.now().plusMinutes(10),20, epic1.getId()));
         assertEquals(TaskStatus.IN_PROGRESS, taskManager.getEpicById(epic1.getId()).getStatus());
     }
 
@@ -197,13 +200,13 @@ class InMemoryTaskManagerTest {
         final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask("Подзадача 1",
                 "Описание подзадачи 1", epic1.getId()));
         final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask(epicSubtask1.getId()+1,"Подзадача 2",
-                "Описание подзадачи 2",TaskStatus.DONE, epic1.getId()));
+                "Описание подзадачи 2",TaskStatus.DONE, LocalDateTime.now(),10, epic1.getId()));
         assertEquals(TaskStatus.IN_PROGRESS, taskManager.getEpicById(epic1.getId()).getStatus());
     }
 
     @Test
     void TaskCreatedEqualsTaskAdded() {
-        Task task = new Task(1, "Таск 1", "Описание задачи 1", TaskStatus.DONE);
+        Task task = new Task(1, "Таск 1", "Описание задачи 1", TaskStatus.DONE, LocalDateTime.now(),10);
         taskManager.addTask(task);
         List<Task> list = taskManager.getTasks();
         Task taskAdded = list.getFirst();
@@ -211,5 +214,22 @@ class InMemoryTaskManagerTest {
         assertEquals(task.getName(), taskAdded.getName());
         assertEquals(task.getDescription(), taskAdded.getDescription());
         assertEquals(task.getStatus(), taskAdded.getStatus());
+    }
+
+    @Test
+    public void shouldReturnPrioritizedTasks() {
+        Task taskNext, taskPrev;
+        TreeSet<Task> sortedTasks = taskManager.getPrioritizedTasks();
+        if (sortedTasks.size() > 0) {
+            Iterator taskIterator = sortedTasks.iterator();
+            taskPrev = sortedTasks.first();
+            while (taskIterator.hasNext()) {
+                taskNext = (Task) taskIterator.next();
+                if (!taskNext.equals(taskPrev)) {
+                    assertTrue(taskNext.getStartTime().isAfter(taskPrev.getStartTime()) || taskNext.getStartTime().isEqual(taskPrev.getStartTime()), "getPrioritizedTasks() failed");
+                }
+                taskPrev = taskNext;
+            }
+        }
     }
 }
