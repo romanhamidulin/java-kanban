@@ -7,6 +7,8 @@ import ru.yandex.practicum.tasks.Task;
 import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Subtask;
 
+import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,13 +17,14 @@ import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryTaskManagerTest {
+class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
 
-    private static TaskManager taskManager;
+    //private static TaskManager taskManager;
 
     @BeforeEach
-    public void beforeEach() {
-        taskManager = Managers.getDefault();
+    void setUp() throws IOException {
+        taskManager = new InMemoryTaskManager();
+        super.setUp();
     }
     @Test
     void addTask() {
@@ -41,12 +44,12 @@ class InMemoryTaskManagerTest {
     void addEpicAndSubtask() {
         final Epic epic1 = taskManager.addEpic(new Epic("Эпик 1",
                 "Описание эпика 1"));
-        final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask("Подзадача 1",
-                "Описание подзадачи 1", epic1.getId()));
-        final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask("Подзадача 2",
-                "Описание подзадачи 2", epic1.getId()));
-        final Subtask epicSubtask3 = taskManager.addSubtask(new Subtask("Подзадача 3", "Описание подзадачи 3",
-                epic1.getId()));
+        final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask(1,"Подзадача 1",
+                "Описание подзадачи 1",TaskStatus.NEW,LocalDateTime.now(),Duration.ofMinutes(10), epic1.getId()));
+        final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask(2,"Подзадача 2",
+                "Описание подзадачи 2",TaskStatus.NEW,LocalDateTime.now().plusMinutes(10),Duration.ofMinutes(3), epic1.getId()));
+        final Subtask epicSubtask3 = taskManager.addSubtask(new Subtask(3,"Подзадача 3", "Описание подзадачи 3",
+                TaskStatus.NEW,LocalDateTime.now().plusMinutes(20),Duration.ofMinutes(10), epic1.getId()));
         final Epic savedEpic = taskManager.getEpicById(epic1.getId());
         final Subtask savedSubtask1 = taskManager.getSubtaskById(epicSubtask1.getId());
         final Subtask savedSubtask2 = taskManager.getSubtaskById(epicSubtask2.getId());
@@ -117,12 +120,12 @@ class InMemoryTaskManagerTest {
     public void deleteSubtasksIsShouldReturnEmptyList() {
         final Epic epic1 = taskManager.addEpic(new Epic("Эпик 1",
                 "Описание эпика 1"));
-        final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask("Подзадача 1",
-                "Описание подзадачи 1", epic1.getId()));
-        final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask("Подзадача 2",
-                "Описание подзадачи 2", epic1.getId()));
-        final Subtask epicSubtask3 = taskManager.addSubtask(new Subtask("Подзадача 3", "Описание подзадачи 3",
-                epic1.getId()));
+        final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask(1,"Подзадача 1",
+                "Описание подзадачи 1",TaskStatus.NEW,LocalDateTime.now(),Duration.ofMinutes(10), epic1.getId()));
+        final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask(2,"Подзадача 2",
+                "Описание подзадачи 2",TaskStatus.NEW,LocalDateTime.now().plusMinutes(10),Duration.ofMinutes(3), epic1.getId()));
+        final Subtask epicSubtask3 = taskManager.addSubtask(new Subtask(3,"Подзадача 3", "Описание подзадачи 3",
+                TaskStatus.NEW,LocalDateTime.now().plusMinutes(20),Duration.ofMinutes(10), epic1.getId()));
         taskManager.deleteSubtasks();
         List<Subtask> subtasks = taskManager.getSubtasks();
         assertTrue(subtasks.isEmpty(), "Ошибка! После удаления подзадач список должен быть пуст.");
@@ -150,63 +153,10 @@ class InMemoryTaskManagerTest {
         assertEquals(0, taskManager.getHistory().size());
     }
 
-    @Test
-    public void newEpicStatusSubtasksIsEmpty(){
-        final Epic epic1 = taskManager.addEpic(new Epic("Эпик 1",
-                "Описание эпика 1"));
-        taskManager.addEpic(epic1);
-        assertEquals(TaskStatus.NEW, taskManager.getEpicById(epic1.getId()).getStatus());
-    }
-    @Test
-    void epicStatusAllSubtasksIsNew() {
-        final Epic epic1 = taskManager.addEpic(new Epic("Эпик 1",
-                "Описание эпика 1"));
-        final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask("Подзадача 1",
-                "Описание подзадачи 1", epic1.getId()));
-        final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask("Подзадача 2",
-                "Описание подзадачи 2", epic1.getId()));
-        taskManager.addEpic(epic1);
-        taskManager.addSubtask(epicSubtask1);
-        taskManager.addSubtask(epicSubtask2);
-        assertEquals(TaskStatus.NEW, taskManager.getEpicById(epic1.getId()).getStatus());
-    }
-
-    @Test
-    void epicStatusAllSubtasksIsDone() {
-        final Epic epic1 = taskManager.addEpic(new Epic("Эпик 1",
-                "Описание эпика 1"));
-        final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask(1,"Подзадача 1",
-                "Описание подзадачи 1",TaskStatus.DONE, LocalDateTime.now(),10,epic1.getId()));
-        final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask(2,"Подзадача 2",
-                "Описание подзадачи 2",TaskStatus.DONE, LocalDateTime.now().plusMinutes(10),20,epic1.getId()));
-        assertEquals(TaskStatus.DONE, taskManager.getEpicById(epic1.getId()).getStatus());
-    }
-
-    @Test
-    void epicStatusAllSubtasksInProgress() {
-        final Epic epic1 = taskManager.addEpic(new Epic("Эпик 1",
-                "Описание эпика 1"));
-        final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask(1,"Подзадача 1",
-                "Описание подзадачи 1",TaskStatus.IN_PROGRESS, LocalDateTime.now(),10,epic1.getId()));
-        final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask(2,"Подзадача 2",
-                "Описание подзадачи 2",TaskStatus.IN_PROGRESS, LocalDateTime.now().plusMinutes(10),20, epic1.getId()));
-        assertEquals(TaskStatus.IN_PROGRESS, taskManager.getEpicById(epic1.getId()).getStatus());
-    }
-
-    @Test
-    void epicStatusAllSubtasksNewAndDone() {
-        final Epic epic1 = taskManager.addEpic(new Epic("Эпик 1",
-                "Описание эпика 1"));
-        final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask("Подзадача 1",
-                "Описание подзадачи 1", epic1.getId()));
-        final Subtask epicSubtask2 = taskManager.addSubtask(new Subtask(epicSubtask1.getId()+1,"Подзадача 2",
-                "Описание подзадачи 2",TaskStatus.DONE, LocalDateTime.now(),10, epic1.getId()));
-        assertEquals(TaskStatus.IN_PROGRESS, taskManager.getEpicById(epic1.getId()).getStatus());
-    }
 
     @Test
     void TaskCreatedEqualsTaskAdded() {
-        Task task = new Task(1, "Таск 1", "Описание задачи 1", TaskStatus.DONE, LocalDateTime.now(),10);
+        Task task = new Task(1, "Таск 1", "Описание задачи 1", TaskStatus.DONE, LocalDateTime.now(),Duration.ofMinutes(10));
         taskManager.addTask(task);
         List<Task> list = taskManager.getTasks();
         Task taskAdded = list.getFirst();
@@ -219,10 +169,10 @@ class InMemoryTaskManagerTest {
     @Test
     public void shouldReturnPrioritizedTasks() {
         Task taskNext, taskPrev;
-        TreeSet<Task> sortedTasks = taskManager.getPrioritizedTasks();
-        if (sortedTasks.size() > 0) {
-            Iterator taskIterator = sortedTasks.iterator();
-            taskPrev = sortedTasks.first();
+        TreeSet<Task> prioritizedTasks = taskManager.getPrioritizedTasks();
+        if (prioritizedTasks.size() > 0) {
+            Iterator taskIterator = prioritizedTasks.iterator();
+            taskPrev = prioritizedTasks.first();
             while (taskIterator.hasNext()) {
                 taskNext = (Task) taskIterator.next();
                 if (!taskNext.equals(taskPrev)) {

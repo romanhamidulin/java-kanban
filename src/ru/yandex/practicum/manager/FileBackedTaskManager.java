@@ -7,6 +7,7 @@ import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 
 import java.io.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -184,11 +185,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         switch (type) {
             case "TASK":
-                return new Task(id, name, description, status, startTime, Integer.parseInt(parts[7]));
+                return new Task(id, name, description, status, startTime, Duration.ofMinutes(Long.parseLong(parts[7])));
             case "EPIC":
-                return new Epic(id, name, description, status, startTime, Integer.parseInt(parts[7]));
+                return new Epic(id, name, description, status, startTime, Duration.ofMinutes(Long.parseLong(parts[7])));
             case "SUBTASK":
-                return new Subtask(id, name, description, status, startTime, Integer.parseInt(parts[7]), epicId);
+                return new Subtask(id, name, description, status, startTime, Duration.ofMinutes(Long.parseLong(parts[7])), epicId);
             default:
                 throw new IllegalArgumentException("Неизвестный типа задачи: " + type);
         }

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.manager;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -14,7 +15,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Epic> epics = new HashMap<>();
     protected final Map<Integer, Subtask> subtasks = new HashMap<>();
     protected final HistoryManager history = Managers.getDefaultHistory();
-    protected int id = 1;
+    protected int id = 0;
     protected final TreeSet<Task> prioritizedTasks;
 
     public InMemoryTaskManager() {
@@ -254,7 +255,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void setEpicEndTime(Epic epic) {
         LocalDateTime startTime = null;
         LocalDateTime endTime = null;
-        int duration = 0;
+        Duration duration = Duration.ZERO;
         for (Subtask subTask : epic.getSubtaskList()) {
             if (subTask.getStartTime() == null || subTask.getEndTime() == null) {
                 continue;
@@ -273,7 +274,7 @@ public class InMemoryTaskManager implements TaskManager {
                     endTime = subTask.getEndTime();
                 }
             }
-            duration += subTask.getDuration();
+            duration.plus(subTask.getDuration());
         }
         epic.setStartTime(startTime);
         epic.setEndTime(endTime);

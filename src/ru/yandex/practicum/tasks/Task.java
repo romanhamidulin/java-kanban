@@ -3,6 +3,7 @@ package ru.yandex.practicum.tasks;
 import ru.yandex.practicum.enums.TaskStatus;
 import ru.yandex.practicum.enums.TaskTypes;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Task {
@@ -13,9 +14,9 @@ public class Task {
     private TaskStatus status;
     protected TaskTypes type;
     protected LocalDateTime startTime;
-    protected int duration;
+    protected Duration duration;
 
-    public Task(int id, String name, String description, TaskStatus status, LocalDateTime startTime, int duration) {
+    public Task(int id, String name, String description, TaskStatus status, LocalDateTime startTime, Duration duration) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -55,6 +56,13 @@ public class Task {
         }
         return hash;
     }
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
 
     @Override
     public String toString() {
@@ -65,7 +73,7 @@ public class Task {
                 ", status=" + status +
                 ", type=" + type +
                 ", startTime=" + startTime +
-                ", duration=" + duration +
+                ", duration=" + duration.toMinutes() +
                 '}';
     }
 
@@ -106,14 +114,16 @@ public class Task {
         return startTime;
     }
 
-    public Integer getDuration() {
+    public Duration getDuration() {
         return duration;
     }
 
     public LocalDateTime getEndTime() {
         if (startTime == null) return null;
-        return startTime.plusMinutes(duration);
+        return startTime.plusMinutes(duration.toMinutes());
     }
+
+
 //    public void setStatus(TaskStatus status) {
 //        this.status = status;
 //    }

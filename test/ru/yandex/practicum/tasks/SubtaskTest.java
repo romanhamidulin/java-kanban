@@ -3,6 +3,7 @@ package ru.yandex.practicum.tasks;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.enums.TaskStatus;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,8 +14,8 @@ class SubtaskTest {
     public void subtaskIsShouldBeEqual() {
 
         Epic epic1 = new Epic("Эпик 1", "Описание эпика 1");
-        Subtask subtask1 = new Subtask(1, "Первый сабтаск","Описание первого сабтаскa", TaskStatus.NEW, LocalDateTime.now(),10,epic1.getId());
-        Subtask subtask2 = new Subtask(1, "Первый сабтаск","Описание первого сабтаскa", TaskStatus.DONE, LocalDateTime.now(),10,epic1.getId());
+        Subtask subtask1 = new Subtask(1, "Первый сабтаск","Описание первого сабтаскa", TaskStatus.NEW, LocalDateTime.now(), Duration.ofMinutes(10),epic1.getId());
+        Subtask subtask2 = new Subtask(1, "Первый сабтаск","Описание первого сабтаскa", TaskStatus.DONE, LocalDateTime.now(),Duration.ofMinutes(10),epic1.getId());
         assertEquals(subtask1, subtask1,"Ошибка! Наследники класса Task должны быть равны друг другу, если равен их id");
     }
 }

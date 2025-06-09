@@ -3,6 +3,7 @@ package ru.yandex.practicum.tasks;
 import ru.yandex.practicum.enums.TaskStatus;
 import ru.yandex.practicum.enums.TaskTypes;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -11,12 +12,12 @@ public class Epic extends Task {
     private ArrayList<Subtask> subtaskList = new ArrayList<>();
     private LocalDateTime endTime;
 
-    public Epic(int id, String name, String description, TaskStatus status, LocalDateTime startTime, int duration) {
+    public Epic(int id, String name, String description, TaskStatus status, LocalDateTime startTime, Duration duration) {
         super(id, name, description, status, startTime, duration);
         type = TaskTypes.EPIC;
     }
 
-    public Epic(int id, String name, String description, ArrayList<Subtask> subList,TaskStatus status, LocalDateTime startTime, int duration) {
+    public Epic(int id, String name, String description, ArrayList<Subtask> subList,TaskStatus status, LocalDateTime startTime, Duration duration) {
         super(id, name, description, status, startTime, duration);
         this.subtaskList = subList;
         type = TaskTypes.EPIC;
@@ -53,7 +54,7 @@ public class Epic extends Task {
         this.startTime = startTime;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 
@@ -74,7 +75,7 @@ public class Epic extends Task {
         }
         result += ", status = " + getStatus() +
                 ", type=" + type + ", startTime=" + startTime +
-                ", duration=" + duration + '}';
+                ", duration=" + duration.toMinutes() + '}';
         return result;
     }
 
