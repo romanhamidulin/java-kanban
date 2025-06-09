@@ -56,6 +56,7 @@ public class Task {
         }
         return hash;
     }
+
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
