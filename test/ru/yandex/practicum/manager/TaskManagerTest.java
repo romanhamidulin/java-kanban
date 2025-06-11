@@ -20,8 +20,17 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     protected Task task;
     protected Epic epic;
     protected Subtask subtask;
+    protected Subtask subtask1;
     protected LocalDateTime startTime;
     protected Duration duration;
+
+
+    @BeforeEach
+    public void setTaskManager() throws IOException {
+        taskManager = createTaskManager();
+    }
+
+    protected abstract T createTaskManager() throws IOException;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -36,6 +45,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         subtask = new Subtask("Подзадача", "Описание1", 0);
         subtask.setStartTime(startTime.plus(Duration.ofMinutes(10)));
         subtask.setDuration(duration);
+        subtask1 = new Subtask("Подзадача1", "Описание2", 0);
+        subtask1.setStartTime(startTime.plus(Duration.ofMinutes(35)));
+        subtask1.setDuration(duration);
     }
 
     @Test
@@ -48,7 +60,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void addSubtask() {
         taskManager.addEpic(epic);
         taskManager.addSubtask(subtask);
-        assertEquals(1, taskManager.getSubtasks().size());
+        taskManager.addSubtask(subtask1);
+        assertEquals(2, taskManager.getSubtasks().size());
     }
 
     @Test
@@ -72,13 +85,14 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void getSubtasks() {
         taskManager.addEpic(epic);
         taskManager.addSubtask(subtask);
-        Assertions.assertEquals(1, taskManager.getSubtasks().size());
+        taskManager.addSubtask(subtask1);
+        Assertions.assertEquals(2, taskManager.getSubtasks().size());
 
         Subtask subTask1 = new Subtask("Новая задача", "новое описание", 0);
         subTask1.setDuration(duration);
         subTask1.setStartTime(startTime.plus(Duration.ofHours(4)));
         taskManager.addSubtask(subTask1);
-        Assertions.assertEquals(2, taskManager.getSubtasks().size());
+        Assertions.assertEquals(3, taskManager.getSubtasks().size());
     }
 
     @Test

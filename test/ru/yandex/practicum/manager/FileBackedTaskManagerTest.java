@@ -20,10 +20,16 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>{
     //private FileBackedTaskManager manager;
     private File tempFile;
 
-    @BeforeEach
-    void setUp() throws IOException {
+    @Override
+    protected FileBackedTaskManager createTaskManager() throws IOException {
         tempFile = File.createTempFile("tasks", ".csv");
         taskManager = new FileBackedTaskManager(tempFile);
+        return taskManager;
+    }
+
+    @BeforeEach
+    void setUp() throws IOException {
+
         super.setUp();
     }
 

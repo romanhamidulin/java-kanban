@@ -60,7 +60,7 @@ public interface TaskManager {
     Subtask updateSubtask(Subtask subtask);
 
     // обновить статус эпика
-    void updateEpicStatus(Epic epic);
+    //void updateEpicStatus(Epic epic);
 
     // удалить таски
     void deleteTasks();
@@ -91,5 +91,5 @@ public interface TaskManager {
 
     TreeSet<Task> getPrioritizedTasks();
 
-    void setEpicEndTime(Epic epic);
+    //void setEpicEndTime(Epic epic);
 }

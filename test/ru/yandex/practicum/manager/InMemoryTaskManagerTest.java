@@ -7,6 +7,7 @@ import ru.yandex.practicum.tasks.Task;
 import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Subtask;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -20,10 +21,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
 
     //private static TaskManager taskManager;
+    protected InMemoryTaskManager createTaskManager() throws IOException {
+        taskManager = new InMemoryTaskManager();
+        return taskManager;
+    }
 
     @BeforeEach
     void setUp() throws IOException {
-        taskManager = new InMemoryTaskManager();
+        //taskManager = new InMemoryTaskManager();
         super.setUp();
     }
     @Test
