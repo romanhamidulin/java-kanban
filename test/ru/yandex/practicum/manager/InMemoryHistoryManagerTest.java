@@ -7,6 +7,8 @@ import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +18,30 @@ class InMemoryHistoryManagerTest {
 
     private static TaskManager taskManager;
     private HistoryManager historyManager;
+    private Task task;
+    private Epic epic;
+    private Subtask subTask;
+    private LocalDateTime startTime;
+    private Duration duration;
 
     @BeforeEach
-    public void beforeEach() {
+    void setUp() {
+        startTime = LocalDateTime.now();
+        duration = Duration.ofHours(1);
         taskManager = Managers.getDefault();
         historyManager = Managers.getDefaultHistory();
+        task = new Task("Задача", "Описание");
+        task.setId(0);
+        task.setDuration(duration);
+        task.setStartTime(startTime);
+        epic = new Epic("Эпик", "описание");
+        epic.setId(1);
+        epic.setDuration(duration);
+        epic.setStartTime(startTime);
+        subTask = new Subtask("Подзадача", "Описание", 0);
+        subTask.setId(2);
+        subTask.setDuration(duration);
+        subTask.setStartTime(startTime);
     }
 
     /*@Test
@@ -47,9 +68,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void getHistoryCorrectOrder() {
-        Task task1 = new Task(1, "Task 1", "Описание 1", TaskStatus.NEW);
-        Task task2 = new Task(2, "Task 2", "Описание 2", TaskStatus.IN_PROGRESS);
-        Task task3 = new Task(3, "Task 3", "Описание 3", TaskStatus.DONE);
+        Task task1 = new Task(1, "Task 1", "Описание 1", TaskStatus.NEW, LocalDateTime.now(),Duration.ofMinutes(10));
+        Task task2 = new Task(2, "Task 2", "Описание 2", TaskStatus.IN_PROGRESS,LocalDateTime.now().plusMinutes(15),Duration.ofMinutes(2));
+        Task task3 = new Task(3, "Task 3", "Описание 3", TaskStatus.DONE,LocalDateTime.now().plusMinutes(5),Duration.ofMinutes(10));
         historyManager.add(task1);
         historyManager.add(task2);
         historyManager.add(task3);
@@ -62,9 +83,8 @@ class InMemoryHistoryManagerTest {
     }
     @Test
     void shouldRemoveTaskFromHistory() {
-        Task task1 = new Task(1, "Task 1", "Описание 1", TaskStatus.NEW);
-        historyManager.add(task1);
-        historyManager.remove(task1.getId());
+        historyManager.add(task);
+        historyManager.remove(task.getId());
         List<Task> history = historyManager.getHistory();
         assertEquals(0, history.size());
     }
@@ -81,11 +101,10 @@ class InMemoryHistoryManagerTest {
     }
     @Test
     public void getHistoryShouldReturnOldTaskAfterUpdate() {
-        Task task = new Task("Таск 1", "описание таск 1");
         taskManager.addTask(task);
         taskManager.getTaskById(task.getId());
         taskManager.updateTask(new Task(task.getId(), "Обновленный таск 1",
-                "описание обновленного таск 1", TaskStatus.IN_PROGRESS));
+                "описание обновленного таск 1", TaskStatus.IN_PROGRESS, LocalDateTime.now(),Duration.ofMinutes(10)));
         List<Task> tasks = taskManager.getHistory();
         Task oldTask = tasks.getFirst();
         assertEquals(task.getName(), oldTask.getName(), "Ошибка! В истории не сохранилась старая версия задачи");
@@ -96,11 +115,10 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void getHistoryShouldReturnOldEpicAfterUpdate() {
-        Epic epic = new Epic("Эпик 1", "Описание эпик 1");
         taskManager.addEpic(epic);
         taskManager.getEpicById(epic.getId());
         taskManager.updateEpic(new Epic(epic.getId(), "Новое имя", "новое описание",
-                TaskStatus.IN_PROGRESS));
+                TaskStatus.IN_PROGRESS, LocalDateTime.now(),Duration.ofMinutes(10)));
         List<Task> epics = taskManager.getHistory();
         Epic oldEpic = (Epic) epics.getFirst();
         assertEquals(epic.getName(), oldEpic.getName(),
@@ -111,19 +129,67 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void getHistoryShouldReturnOldSubtaskAfterUpdate() {
-        Epic epic1 = new Epic("Эпик 1", "Описание эпик 1");
-        taskManager.addEpic(epic1);
-        final Subtask epicSubtask1 = taskManager.addSubtask(new Subtask("Подзадача 1",
-                "Описание подзадачи 1", epic1.getId()));
-        taskManager.addSubtask(epicSubtask1);
-        taskManager.getSubtaskById(epicSubtask1.getId());
-        taskManager.updateSubtask(new Subtask(epicSubtask1.getId(), "Новое имя",
-                "новое описание", TaskStatus.IN_PROGRESS, epic1.getId()));
+        taskManager.addEpic(epic);
+
+        taskManager.addSubtask(subTask);
+        taskManager.getSubtaskById(subTask.getId());
+        taskManager.updateSubtask(new Subtask(subTask.getId(), "Новое имя",
+                "новое описание", TaskStatus.IN_PROGRESS, LocalDateTime.now(), Duration.ofMinutes(10), epic.getId()));
         List<Task> subtasks = taskManager.getHistory();
         Subtask oldSubtask = (Subtask) subtasks.getFirst();
-        assertEquals(epicSubtask1.getName(), oldSubtask.getName(),
+        assertEquals(subTask.getName(), oldSubtask.getName(),
                 "Ошибка! В истории не сохранилась старая версия эпика");
-        assertEquals(epicSubtask1.getDescription(), oldSubtask.getDescription(),
+        assertEquals(subTask.getDescription(), oldSubtask.getDescription(),
                 "Ошибка! В истории не сохранилась старая версия эпика");
+    }
+    @Test
+    void checkDuplicatesInHistory() {
+        historyManager.add(task);
+        historyManager.add(epic);
+        historyManager.add(task);
+        assertEquals(2, historyManager.getHistory().size());
+    }
+
+    @Test
+    void checkHistoryElementMovesToLastOneAfterOneMoreCall() {
+        historyManager.add(task);
+        historyManager.add(epic);
+        assertEquals(task, historyManager.getHistory().getFirst());
+        historyManager.add(task);
+        assertEquals(task, historyManager.getHistory().getLast());
+        assertNotEquals(task, historyManager.getHistory().getFirst());
+    }
+
+    @Test
+    void removeTaskFromTheMiddleOfHistory() {
+        historyManager.add(task);
+        historyManager.add(subTask);
+        historyManager.add(epic);
+        assertEquals(3, historyManager.getHistory().size());
+        historyManager.remove(epic.getId());
+        assertEquals(List.of(task, subTask), historyManager.getHistory());
+    }
+
+    @Test
+    void removeTaskFromTheEndOfHistory() {
+        historyManager.add(task);
+        historyManager.add(epic);
+        historyManager.add(subTask);
+        assertEquals(3, historyManager.getHistory().size());
+        historyManager.remove(subTask.getId());
+        assertEquals(2, historyManager.getHistory().size());
+        assertEquals(epic, historyManager.getHistory().getLast());
+        assertFalse(historyManager.getHistory().contains(subTask));
+    }
+
+    @Test
+    void removeFirstTaskFromHistory() {
+        historyManager.add(task);
+        historyManager.add(epic);
+        historyManager.add(subTask);
+        assertEquals(3, historyManager.getHistory().size());
+        historyManager.remove(task.getId());
+        assertEquals(2, historyManager.getHistory().size());
+        assertEquals(epic, historyManager.getHistory().getFirst());
     }
 }

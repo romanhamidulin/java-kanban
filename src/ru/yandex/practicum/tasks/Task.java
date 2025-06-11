@@ -3,6 +3,9 @@ package ru.yandex.practicum.tasks;
 import ru.yandex.practicum.enums.TaskStatus;
 import ru.yandex.practicum.enums.TaskTypes;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
 
     private int id;
@@ -10,13 +13,17 @@ public class Task {
     private String description;
     private TaskStatus status;
     protected TaskTypes type;
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
-    public Task(int id, String name, String description, TaskStatus status) {
+    public Task(int id, String name, String description, TaskStatus status, LocalDateTime startTime, Duration duration) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
-        this.type = TaskTypes.TASK;;
+        this.type = TaskTypes.TASK;
+        this.startTime = startTime;
+        this.duration = duration;
 
     }
 
@@ -50,6 +57,14 @@ public class Task {
         return hash;
     }
 
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -58,6 +73,8 @@ public class Task {
                 ", id=" + id +
                 ", status=" + status +
                 ", type=" + type +
+                ", startTime=" + startTime +
+                ", duration=" + duration.toMinutes() +
                 '}';
     }
 
@@ -93,6 +110,21 @@ public class Task {
     public Object getType() {
         return type;
     }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime == null) return null;
+        return startTime.plusMinutes(duration.toMinutes());
+    }
+
+
 //    public void setStatus(TaskStatus status) {
 //        this.status = status;
 //    }
