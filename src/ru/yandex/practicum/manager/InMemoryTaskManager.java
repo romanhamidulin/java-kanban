@@ -1,7 +1,5 @@
 package ru.yandex.practicum.manager;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import ru.yandex.practicum.exception.TaskOverlapException;
