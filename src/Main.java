@@ -1,3 +1,5 @@
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 import ru.yandex.practicum.manager.InMemoryTaskManager;
 import ru.yandex.practicum.tasks.Task;
@@ -18,7 +20,7 @@ public class Main {
         System.out.println(compliteSprintAdded);
 
         Task compliteSprintUpdate = new Task(compliteSprint.getId(), "Пройти 4й спринт", "Можно и за 1 неделю",
-                TaskStatus.IN_PROGRESS);
+                TaskStatus.IN_PROGRESS, LocalDateTime.now(), Duration.ofMinutes(10));
         Task compliteSprintUpdated = taskManager.updateTask(compliteSprintUpdate);
         System.out.println(compliteSprintUpdated);
 
@@ -42,7 +44,7 @@ public class Main {
         taskManager.getEpics().forEach(System.out::println);
         //completeJavaCoreSubtask1.setStatus(TaskStatus.DONE);
         Subtask newCompleteJavaCoreSubtask2 = new Subtask(completeJavaCoreSubtask2.getId(),completeJavaCoreSubtask2.getName(),
-                completeJavaCoreSubtask2.getDescription(),TaskStatus.DONE,completeJavaCoreSubtask2.getEpicId());
+                completeJavaCoreSubtask2.getDescription(),TaskStatus.DONE, LocalDateTime.now(),Duration.ofMinutes(10),completeJavaCoreSubtask2.getEpicId());
         //completeJavaCoreSubtask3.setStatus(TaskStatus.DONE);
         //completeJavaCoreSubtask4.setStatus(TaskStatus.DONE);
         //completeJavaCoreSubtask5.setStatus(TaskStatus.DONE);
@@ -60,7 +62,7 @@ public class Main {
         taskManager.addSubtask(newEpicSubtask1);
         System.out.println(newEpic);
         Subtask updNewEpicSubtask1 = new Subtask(newEpicSubtask1.getId(),newEpicSubtask1.getName(),
-                newEpicSubtask1.getDescription(),TaskStatus.DONE,newEpicSubtask1.getEpicId());
+                newEpicSubtask1.getDescription(),TaskStatus.DONE, LocalDateTime.now(),Duration.ofMinutes(10),newEpicSubtask1.getEpicId());
         taskManager.updateSubtask(updNewEpicSubtask1);
         System.out.println("Печатаем все");
         taskManager.printAll();
