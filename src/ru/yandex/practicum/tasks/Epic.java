@@ -20,7 +20,7 @@ public class Epic extends Task {
         type = TaskTypes.EPIC;
     }
 
-    public Epic(int id, String name, String description, ArrayList<Subtask> subList,TaskStatus status, LocalDateTime startTime, Duration duration) {
+    public Epic(int id, String name, String description, ArrayList<Subtask> subList, TaskStatus status, LocalDateTime startTime, Duration duration) {
         super(id, name, description, status, startTime, duration);
         this.subtaskList = subList;
         type = TaskTypes.EPIC;
@@ -46,7 +46,6 @@ public class Epic extends Task {
     }
 
     public ArrayList<Subtask> getSubtaskList() {
-        //return subtaskList;
         return new ArrayList<>(subtaskList);
     }
 
@@ -54,18 +53,6 @@ public class Epic extends Task {
     public LocalDateTime getEndTime() {
         return endTime;
     }
-
-//    public void setEndTime(LocalDateTime endTime) {
-//        this.endTime = endTime;
-//    }
-//
-//    public void setStartTime(LocalDateTime startTime) {
-//        this.startTime = startTime;
-//    }
-//
-//    public void setDuration(Duration duration) {
-//        this.duration = duration;
-//    }
 
     public void setSubtaskList(ArrayList<Subtask> subtaskList) {
         this.subtaskList = subtaskList;
@@ -95,56 +82,25 @@ public class Epic extends Task {
                 .reduce((first, second) -> second) // Берем последний элемент
                 .map(Subtask::getEndTime);
 
-        // Рассчитываем общую продолжительность с учетом промежутков
-        Duration totalDuration = Duration.ZERO;
-        LocalDateTime lastEndTime = startTime.get();
-
-        for (Subtask subTask : validSubtasks) {
-            if (subTask.getStartTime().isAfter(lastEndTime)) {
-                // Добавляем промежуток между подзадачами
-                totalDuration = totalDuration.minus(Duration.between(lastEndTime, subTask.getStartTime()));
-            }
-            totalDuration = totalDuration.plus(subTask.getDuration());
-            lastEndTime = subTask.getEndTime();
-        }
-        super.setDuration(totalDuration);
+        super.setDuration(Duration.between(endTime.get(), startTime.get()));
     }
 
     public void updateStartTime() {
-        List<Subtask> validSubtasks = subtaskList.stream()
-                .filter(subTask -> subTask.getStartTime() != null && subTask.getEndTime() != null)
-                .sorted(Comparator.comparing(Subtask::getStartTime)) // Сортируем по времени начала
-                .toList();
-        if (validSubtasks.isEmpty()) {
-            super.setStartTime(null);
-            return;
-        }
-        Optional<LocalDateTime> startTime = validSubtasks.stream()
-                .findFirst()
-                .map(Subtask::getStartTime);
-
-        super.setStartTime(startTime.get());
+        super.setStartTime(
+                subtaskList.stream()
+                        .filter(subTask -> subTask.getStartTime() != null && subTask.getEndTime() != null)
+                        .min(Comparator.comparing(Subtask::getStartTime)) // Находим подзадачу с минимальным (первым) временем
+                        .map(Subtask::getStartTime)
+                        .orElse(null)
+        );
     }
 
     public void updateEndTime() {
-        List<Subtask> validSubtasks = subtaskList.stream()
+        this.endTime = subtaskList.stream()
                 .filter(subTask -> subTask.getStartTime() != null && subTask.getEndTime() != null)
-                .sorted(Comparator.comparing(Subtask::getStartTime)) // Сортируем по времени начала
-                .toList();
-
-       if (validSubtasks.isEmpty()) {
-           this.endTime = null;
-           return;
-        }
-
-       Optional<LocalDateTime> endTime = validSubtasks.stream()
-                .reduce((first, second) -> second) // Берем последний элемент
-                .map(Subtask::getEndTime);
-       this.endTime = endTime.get();
-    }
-
-    public void setDuration(Duration duration) {
-        super.setDuration(duration);
+                .max(Comparator.comparing(Subtask::getStartTime))
+                .map(Subtask::getEndTime)
+                .orElse(null);
     }
 
     @Override
