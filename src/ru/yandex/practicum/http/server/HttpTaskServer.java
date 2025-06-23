@@ -38,7 +38,7 @@ public class HttpTaskServer {
         System.out.println("Сервер запущен");
     }
 
-    public Gson getGson() {
+    public static Gson getGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .registerTypeAdapter(Duration.class, new DurationAdapter())
